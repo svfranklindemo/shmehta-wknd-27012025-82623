@@ -6,10 +6,11 @@
 
 import {
   decorateMain,
+  getOrigin,
 } from '../../scripts/scripts.js';
 
 import {
-  loadSections,
+  loadBlocks,
 } from '../../scripts/aem.js';
 
 /**
@@ -27,14 +28,14 @@ export async function loadFragment(path) {
       // reset base path for media to fragment base
       const resetAttributeBase = (tag, attr) => {
         main.querySelectorAll(`${tag}[${attr}^="./media_"]`).forEach((elem) => {
-          elem[attr] = new URL(elem.getAttribute(attr), new URL(path, window.location)).href;
+          elem[attr] = new URL(elem.getAttribute(attr), new URL(path, getOrigin())).href;
         });
       };
       resetAttributeBase('img', 'src');
       resetAttributeBase('source', 'srcset');
 
       decorateMain(main);
-      await loadSections(main);
+      await loadBlocks(main);
       return main;
     }
   }
